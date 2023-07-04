@@ -1,0 +1,18 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="My Suite" >
+	<test name="My Test" parallel="methods">
+		<parameter name="nums" value="
+		1,
+		2,
+		3,
+		4,
+		5,
+		6,
+		7,
+		8
+	"/>
+		<classes>
+			<class name="ScraperClass.ScrapStart" />
+		</classes>
+	</test>
+</suite>
