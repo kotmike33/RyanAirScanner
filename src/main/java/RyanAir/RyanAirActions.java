@@ -16,9 +16,8 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
-public class RyanAirActions extends SeleniumStarter {
+public class RyanAirActions extends SeleniumStarter{
 	public static LocalDate today;
-
 	public RyanAirActions() {
 		today = LocalDate.now();
 	}
@@ -38,15 +37,14 @@ public class RyanAirActions extends SeleniumStarter {
 	private static WebElement upperCarouselNextButton;
 	@FindBy(xpath = "//flights-summary/div/div[2]//button[contains(@class,'next')]/carousel-arrow")
 	private static WebElement lowerCarouselNextButton;
+
 	public void starter() throws IOException {
 		PageFactory.initElements(driver, RyanAirActions.class);
 		UsefulMethods usefulMethods = new UsefulMethods();
 		driver.get(ConfigVariables.URL);
-
 		if (usefulMethods.isElementPresent(cookiesAgreeButton)) {
 			cookiesAgreeButton.click();
 		}
-
 		LoadSearchResults(
 				ConfigVariables.FROM_COUNTRY,
 				ConfigVariables.FROM_AIRPORT,
@@ -102,6 +100,13 @@ public class RyanAirActions extends SeleniumStarter {
 					WebElement flightCell = driver.findElement(By.xpath(tempUpperCarouselXpath));
 					String flightPrice = driver.findElement(By.xpath(tempUpperCarouselXpath + "//ry-price/span[contains(@class,'integ')]")).getText();
 					LocalDate flightDate = LocalDate.parse(flightCell.getAttribute("data-ref"));
+					debug.functionDebug("DAYS SCANNED: " + ChronoUnit.DAYS.between(today, flightDate));
+					if (ChronoUnit.DAYS.between(today, flightDate) > ConfigVariables.NUM_OF_DAYS_TO_BEE_SCANNED) {
+						debug.testDebug("Days between dates: " + ChronoUnit.DAYS.between(today, flightDate));
+						debug.testDebug("Exiting the price scanner");
+						whileController = false;
+						break;
+					}
 					debug.testDebug("Request for excel row 3 - " + flightPrice + " --- " + flightDate);
 					excelMethods.putDataToExcel(flightPrice, flightDate, 3);
 				} catch (Exception e) {
@@ -114,12 +119,6 @@ public class RyanAirActions extends SeleniumStarter {
 					LocalDate flightDate = LocalDate.parse(flightCell.getAttribute("data-ref"));
 					debug.testDebug("Request for excel row 4 - " + flightPrice + " --- " + flightDate);
 					excelMethods.putDataToExcel(flightPrice, flightDate, 4);
-					if (ChronoUnit.DAYS.between(today, flightDate) > ConfigVariables.NUM_OF_DAYS_TO_BEE_SCANNED) {
-						debug.testDebug("Days between dates: " + ChronoUnit.DAYS.between(today, flightDate));
-						debug.testDebug("Exiting the price scanner");
-						whileController = false;
-						break;
-					}
 				} catch (Exception e) {
 					debug.functionDebug("flightCell with ID = " + i + " from lower carousel is empty, skipping...");
 				}
@@ -129,9 +128,5 @@ public class RyanAirActions extends SeleniumStarter {
 			actions.moveToElement(lowerCarouselNextButton).pause(Duration.ofSeconds(1)).click().perform();
 		}
 		excelMethods.reviewCollectedData();
-	}
-	public static void main(String[]args) throws IOException {
-		RyanAirActions ryanAirActions = new RyanAirActions();
-		ryanAirActions.starter();
 	}
 }

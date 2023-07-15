@@ -10,7 +10,7 @@ import java.sql.Date;
 import java.text.SimpleDateFormat;
 
 public class Debug{
-	File file = new File("C:/Users/kotmi/IdeaProjects/RyanAirScanner/src/main/resources/logs.txt");
+	File file = new File(ConfigVariables.PROJECT_PATH + "src/main/resources/logs.txt");
 
 	public void errorMessageDebug(String logs) throws IOException {
 
@@ -41,7 +41,7 @@ public class Debug{
 			System.out.println("Warning: FileWriter does not start.");
 			throw new RuntimeException(e);
 		}
-		writer.write(formatter.format(date) + ": ------------ " + logs + "-------------"+ "\r\n" );
+		writer.write(formatter.format(date) + ": --- " + logs + "-------------"+ "\r\n" );
 		writer.flush();
 		writer.close();
 	}

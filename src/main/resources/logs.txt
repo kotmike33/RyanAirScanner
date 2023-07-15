@@ -1,3 +1,111 @@
-22:25:28 SELENIUM:   Session started.
-22:25:34:    isExists: NO 
-22:25:54 SELENIUM:   Quiting
+10:42:15:    Scan: 2023-07-15 => 2023-07-15SAPM
+10:44:27:    Scan: 2023-07-15 => 2023-07-15SAPM
+10:44:27:    Flight number: 1
+10:44:27:    From Arlanda => To  Modlin on: 21-07-2023 	Price: 809
+
+10:44:27:    From Modlin => To Arlanda on: 21-07-2023 	Price: 972
+
+10:44:27:    Total price: 1781
+
+10:44:27:    Telegram send message job: Flight number: 1
+
+From Arlanda => To  Modlin on: 21-07-2023 	Price: 809
+From Modlin => To Arlanda on: 21-07-2023 	Price: 972
+Total price: 1781
+
+11:00:29:    Scan: 2023-07-15 => 2023-07-15SAPM
+11:00:29:    Flight number: 1
+11:00:29:    From Arlanda => To  Modlin on: 21-07-2023 	Price: 809
+
+11:00:29:    From Modlin => To Arlanda on: 21-07-2023 	Price: 972
+
+11:00:29:    Total price: 1781
+
+11:00:29:    Telegram send message job: Flight number: 1
+
+From Arlanda => To  Modlin on: 21-07-2023 	Price: 809
+From Modlin => To Arlanda on: 21-07-2023 	Price: 972
+Total price: 1781
+
+11:01:47:    Scan: 2023-07-15 => 2023-07-15SAPM
+11:01:47:    Flight number: 1
+11:01:47:    From Arlanda => To  Modlin on: 21-07-2023 	Price: 809
+
+11:01:47:    From Modlin => To Arlanda on: 21-07-2023 	Price: 972
+
+11:01:47:    Total price: 1781
+
+11:01:47:    Telegram send message job: Flight number: 1
+
+From Arlanda => To  Modlin on: 21-07-2023 	Price: 809
+From Modlin => To Arlanda on: 21-07-2023 	Price: 972
+Total price: 1781
+
+11:03:05:    Scan: 2023-07-15 => 2023-07-15SAPM
+11:03:06:    Flight number: 1
+11:03:06:    From Arlanda => To  Modlin on: 21-07-2023 	Price: 809
+
+11:03:06:    From Modlin => To Arlanda on: 21-07-2023 	Price: 972
+
+11:03:06:    Total price: 1781
+
+11:03:06:    Telegram send message job: Flight number: 1
+
+From Arlanda => To  Modlin on: 21-07-2023 	Price: 809
+From Modlin => To Arlanda on: 21-07-2023 	Price: 972
+Total price: 1781
+
+11:03:39:    Scan: 2023-07-15 => 2023-07-15SAPM
+11:03:40:    Flight number: 1
+11:03:40:    From Arlanda => To  Modlin on: 21-07-2023 	Price: 809
+
+11:03:40:    From Modlin => To Arlanda on: 21-07-2023 	Price: 972
+
+11:03:40:    Total price: 1781
+
+11:03:40:    Telegram send message job: Flight number: 1
+
+From Arlanda => To  Modlin on: 21-07-2023 	Price: 809
+From Modlin => To Arlanda on: 21-07-2023 	Price: 972
+Total price: 1781
+
+11:04:32:    Scan: 2023-07-15 => 2023-07-15SAPM
+11:04:33:    Flight number: 1
+11:04:33:    From Arlanda => To  Modlin on: 28-07-2023 	Price: 549
+
+11:04:33:    From Modlin => To Arlanda on: 28-07-2023 	Price: 1198
+
+11:04:33:    Total price: 1747
+
+11:04:33:    Telegram send message job: Flight number: 1
+
+From Arlanda => To  Modlin on: 28-07-2023 	Price: 549
+From Modlin => To Arlanda on: 28-07-2023 	Price: 1198
+Total price: 1747
+
+11:04:33:    Flight number: 2
+11:04:33:    From Arlanda => To  Modlin on: 23-07-2023 	Price: 945
+
+11:04:33:    From Modlin => To Arlanda on: 23-07-2023 	Price: 963
+
+11:04:33:    Total price: 1908
+
+11:04:33:    Telegram send message job: Flight number: 2
+
+From Arlanda => To  Modlin on: 23-07-2023 	Price: 945
+From Modlin => To Arlanda on: 23-07-2023 	Price: 963
+Total price: 1908
+
+11:04:33:    Flight number: 3
+11:04:33:    From Arlanda => To  Modlin on: 19-07-2023 	Price: 1419
+
+11:04:33:    From Modlin => To Arlanda on: 19-07-2023 	Price: 2406
+
+11:04:33:    Total price: 3825
+
+11:04:33:    Telegram send message job: Flight number: 3
+
+From Arlanda => To  Modlin on: 19-07-2023 	Price: 1419
+From Modlin => To Arlanda on: 19-07-2023 	Price: 2406
+Total price: 3825
+

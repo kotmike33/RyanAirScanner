@@ -2,10 +2,9 @@ package MainSelenium;
 
 import Config.ConfigVariables;
 import DEBUG.Debug;
+import RyanAir.RyanAirActions;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
 
 import java.io.IOException;
 import java.time.Duration;
@@ -14,9 +13,8 @@ import java.time.Duration;
 abstract public class SeleniumStarter {
 	protected static ChromeDriver driver;
 
-	@BeforeClass
 	public static void setUp() throws IOException {
-		System.setProperty("webdriver.chrome.driver", "D:/JDK/chromedriver.exe");
+		System.setProperty("webdriver.chrome.driver", ConfigVariables.PROJECT_PATH + "chromedriver.exe");
 		ChromeOptions options = new ChromeOptions();
 		options.addArguments("disable-infobars");
 		options.addArguments("--remote-allow-origins=*");
@@ -32,12 +30,17 @@ abstract public class SeleniumStarter {
 		debug.systemDebug("Session started.");
 		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(4));
 		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
+
+		RyanAirActions ryanAirActions = new RyanAirActions();
+		ryanAirActions.starter();
 	}
 
-	@AfterClass
 	public static void tearDown() throws IOException, InterruptedException {
 		Debug debug = new Debug();
 		debug.systemDebug("Quiting");
 		//driver.quit();
+	}
+	public static void main(String[]args) throws IOException {
+		setUp();
 	}
 }
