@@ -143,11 +143,6 @@ public class RyanairScannerUI extends JFrame {
 		gbc.anchor = GridBagConstraints.LINE_START;
 		add(daysToScanTextField, gbc);
 
-		gbc.gridy = 8;
-		gbc.gridx = 0;
-		gbc.anchor = GridBagConstraints.LINE_END;
-		add(new JLabel("Search suitable flights every X days:"), gbc);
-
 		gbc.gridx = 1;
 		gbc.anchor = GridBagConstraints.LINE_START;
 		add(scanEveryTextField, gbc);
@@ -189,8 +184,7 @@ public class RyanairScannerUI extends JFrame {
 							airportToTextField.getText().isBlank() ||
 							daysToSpendFromTextField.getText().isBlank() ||
 							daysToSpendToTextField.getText().isBlank() ||
-							daysToScanTextField.getText().isBlank() ||
-							scanEveryTextField.getText().isBlank()
+							daysToScanTextField.getText().isBlank()
 			) {
 				JFrame frame = new JFrame("Error");
 				JPanel panel = new JPanel();
@@ -210,11 +204,10 @@ public class RyanairScannerUI extends JFrame {
 				updateConfig("desiredDaysNumFrom", daysToSpendFromTextField.getText());
 				updateConfig("desiredDaysNumTo", daysToSpendToTextField.getText());
 				updateConfig("numOfDaysToBeScanned", daysToScanTextField.getText());
-				updateConfig("scanningFrequencyDays", scanEveryTextField.getText());
 				this.dispose();
 				SeleniumStarter.setUp();
 			}
-		} catch (IOException ex) {
+		} catch (IOException | InterruptedException ex) {
 			throw new RuntimeException(ex);
 		}
 	}

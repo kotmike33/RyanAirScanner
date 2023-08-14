@@ -13,7 +13,7 @@ import java.time.Duration;
 abstract public class SeleniumStarter {
 	protected static ChromeDriver driver;
 
-	public static void setUp() throws IOException {
+	public static void setUp() throws IOException, InterruptedException {
 		System.setProperty("webdriver.chrome.driver", ConfigVariables.PROJECT_PATH + "chromedriver.exe");
 		ChromeOptions options = new ChromeOptions();
 		options.addArguments("disable-infobars");
@@ -29,7 +29,7 @@ abstract public class SeleniumStarter {
 		debug.cleanLogs();
 		debug.systemDebug("Session started.");
 		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(4));
-		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(4));
 
 		RyanAirActions ryanAirActions = new RyanAirActions();
 		ryanAirActions.starter();
@@ -38,9 +38,9 @@ abstract public class SeleniumStarter {
 	public static void tearDown() throws IOException, InterruptedException {
 		Debug debug = new Debug();
 		debug.systemDebug("Quiting");
-		//driver.quit();
+		driver.quit();
 	}
-	public static void main(String[]args) throws IOException {
+	public static void main(String[]args) throws IOException, InterruptedException {
 		setUp();
 	}
 }

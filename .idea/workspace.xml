@@ -5,17 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bde0b34f-ac74-440e-8c4e-ca6469f1d3b2" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/Telegram/MyBot.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Config/ConfigProviderInterface.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Config/ConfigProviderInterface.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Config/ConfigVariables.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Config/ConfigVariables.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/DEBUG/Debug.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/DEBUG/Debug.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Excel/ExcelMethods.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Excel/ExcelMethods.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/JFrame/RyanairScannerUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/JFrame/RyanairScannerUI.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/MainSelenium/SeleniumStarter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/MainSelenium/SeleniumStarter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/RyanAir/RyanAirActions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/RyanAir/RyanAirActions.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Telegram/MyBot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Telegram/MyBot.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/UsefulMethods/UsefulMethods.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/UsefulMethods/UsefulMethods.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/RyanAir.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/RyanAir.xlsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/config.conf" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/config.conf" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/logs.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/logs.txt" afterDir="false" />
@@ -64,7 +63,7 @@
       <recent name="C:\Users\kotmi\IdeaProjects\RyanAirScanner\src" />
     </key>
   </component>
-  <component name="RunManager" selected="TestNG.ExcelMethods.reviewCollectedData">
+  <component name="RunManager" selected="Application.RyanAirActions">
     <configuration name="RyanAirActions" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="RyanAir.RyanAirActions" />
       <module name="RyanAirScanner" />
@@ -134,9 +133,9 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="TestNG.ExcelMethods.reviewCollectedData" />
         <item itemvalue="Application.RyanAirActions" />
         <item itemvalue="TestNG.ExcelMethods.test" />
+        <item itemvalue="TestNG.ExcelMethods.reviewCollectedData" />
       </list>
     </recent_temporary>
   </component>

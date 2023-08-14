@@ -8,7 +8,10 @@ import UsefulMethods.UsefulMethods;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.testng.annotations.Test;
-import java.io.*;
+
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -93,7 +96,7 @@ public class ExcelMethods extends RyanAirActions {
 	//		debug.errorMessageDebug(e.getMessage());
 	//	}
 	}
-	@Test
+
 	public void reviewCollectedData() throws IOException {
 		String reportMessage = "";
 		Debug debug = new Debug();
@@ -105,7 +108,7 @@ public class ExcelMethods extends RyanAirActions {
 				ConfigVariables.TO_COUNTRY,
 				ConfigVariables.TO_AIRPORT
 		);
-
+	//	sheetName = "2023-07-15SAPM"; //DEBUGDEBUGDEBUGDEBUGDEBUGDEBUGDEBUGDEBUGDEBUGDEBUGDEBUGDEBUGDEBUG
 		Sheet sheet = workbook.getSheet(sheetName);
 		if (sheet == null) {
 			sheet = workbook.createSheet(sheetName);
@@ -118,194 +121,196 @@ public class ExcelMethods extends RyanAirActions {
 		Row price1Row = sheet.getRow(3);
 		Row price2Row = sheet.getRow(4);
 
-		List<Integer> minPriceEveryXDaysList1 = new ArrayList<>();
-		List<LocalDate> minPriceEveryXDaysDatesList1 = new ArrayList<>();
-		List<Integer> minPriceEveryXDaysList2 = new ArrayList<>();
-		List<LocalDate> minPriceEveryXDaysDatesList2 = new ArrayList<>();
-		int minPrice1 = 999999999;
-		int minPrice2 = 999999999;
-		String minPrice1Date = "";
-		String minPrice2Date = "";
-		Cell dateTempCell = dateRow.getCell(0);
-		LocalDate daysCounter1 = LocalDate.parse(dateTempCell.getStringCellValue());
-		LocalDate daysCounter2 = LocalDate.parse(dateTempCell.getStringCellValue());
-		for (int i = 0; i > -1; i++) {
-			Cell price1Cell = price1Row.getCell(i);
-			Cell price2Cell = price2Row.getCell(i);
+		List <Double> price1List = new ArrayList<>();
+		List <Double> price2List = new ArrayList<>();
+		List <LocalDate> date1List = new ArrayList<>();
+		List <LocalDate> date2List = new ArrayList<>();
+
+		for (int i=0;i>-1;i++){
 			Cell dateCell = dateRow.getCell(i);
-			if (dateCell == null) {
+			if(i>300){
+				debug.errorMessageDebug("CHECK DATEROW EMPTY CHECK!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 				break;
 			}
-			if (price1Cell != null) {
-				if (price1Cell.getNumericCellValue() < minPrice1) {
-					minPrice1 = (int) price1Cell.getNumericCellValue();
-					minPrice1Date = dateCell.getStringCellValue();
-				}
-				if (ChronoUnit.DAYS.between(daysCounter1,LocalDate.parse(dateCell.getStringCellValue()))
-						>= ConfigVariables.SCANNING_FREQUENCY_DAYS) {
-					if(minPrice1!=999999999) {
-						daysCounter1 = LocalDate.parse(dateCell.getStringCellValue());
-						minPriceEveryXDaysList1.add(minPrice1);
-						minPriceEveryXDaysDatesList1.add(LocalDate.parse(minPrice1Date));
-						minPrice1 = 999999999;
+			if (dateCell == null){
+				debug.functionDebug("out of dates. breaking");
+				break;
+			}
+			LocalDate date1 = LocalDate.parse(dateCell.getStringCellValue());
+			LocalDate date2 = null;
+
+			Cell price1Cell = price1Row.getCell(i);
+			double price1 = 0;
+			try{
+				price1 = price1Cell.getNumericCellValue();
+			}catch (Exception CellIsEmptyException){
+				debug.functionDebug("Exception during loading the price1 cell value");
+			}
+
+			LocalDate date2Temp = null;
+			if(price1!=0) {
+				double minPrice2 = Double.MAX_VALUE;
+
+				for (int x = 0; x>-1; x++) {
+					dateCell = dateRow.getCell(x);
+					if (dateCell == null){
+						debug.functionDebug("dateCell == null, x = " + x);
+						break;
+					}
+					date2Temp = LocalDate.parse(dateCell.getStringCellValue());
+					if(ChronoUnit.DAYS.between(date1,date2Temp) >= ConfigVariables.DESIRED_DAYS_NUM_FROM) {
+						if (ChronoUnit.DAYS.between(date1, date2Temp) > ConfigVariables.DESIRED_DAYS_NUM_TO) {
+							break;
+						}
+
+						Cell price2Cell = price2Row.getCell(x);
+						double price2;
+						try {
+							price2 = price2Cell.getNumericCellValue();
+							if(price2<minPrice2){
+								minPrice2 = price2;
+								date2 = date2Temp;
+							}
+						} catch (Exception CellIsEmptyException) {
+							price2 = 0;
+						}
 					}
 				}
-			}
-			if (price2Cell != null) {
-				if (price2Cell.getNumericCellValue() < minPrice2) {
-					if(minPrice2==999999999) {
-						daysCounter2 = LocalDate.parse(dateCell.getStringCellValue());
-					}
-					minPrice2 = (int) price2Cell.getNumericCellValue();
-					minPrice2Date = dateCell.getStringCellValue();
+				if(minPrice2<Double.MAX_VALUE){
+					price1List.add(price1);
+					date1List.add(date1);
+					price2List.add(minPrice2);
+					date2List.add(date2);
+				}else {
+					debug.functionDebug("minPrice2 value is MAX");
 				}
-				if (ChronoUnit.DAYS.between(daysCounter2,LocalDate.parse(dateCell.getStringCellValue()))
-						>= ConfigVariables.SCANNING_FREQUENCY_DAYS) {
-					if(minPrice2!=999999999) {
-						daysCounter2 = LocalDate.parse(dateCell.getStringCellValue());
-						minPriceEveryXDaysList2.add(minPrice2);
-						minPriceEveryXDaysDatesList2.add(LocalDate.parse(minPrice2Date));
-						minPrice2 = 999999999;
-					}
-				}
+			}else {
+				debug.functionDebug("Failed to load the price1 cell value");
 			}
 		}
 
-//DEBUG_DEBUG_DEBUG_DEBUG_DEBUG_DEBUG_DEBUG_DEBUG_DEBUG_DEBUG_DEBUG_DEBUG_DEBUG_DEBUG_DEBUG_DEBUG
-		Row debugDate1Row = sheet.getRow(10);
-		if (debugDate1Row == null) {
-			debugDate1Row = sheet.createRow(10);
+		List <Double> totalPriceList = new ArrayList<>(); //linked to price 1 list
+		for (int i=0;i<price1List.size();i++){
+			totalPriceList.add(price1List.get(i)+price2List.get(i));
 		}
-		Row debugPrice1Row = sheet.getRow(11);
-		if (debugPrice1Row == null) {
-			debugPrice1Row = sheet.createRow(11);
-		}
-		for (int i = 0; i<minPriceEveryXDaysList1.size();i++){
-			Cell debugDate1Cell;
-			debugDate1Cell = debugDate1Row.getCell(i);
-			if (debugDate1Cell == null) {
-				debugDate1Cell = debugDate1Row.createCell(i);
-			}
-			debugDate1Cell.setCellValue(minPriceEveryXDaysDatesList1.get(i).toString());
+		optimizeFinalFlightsNumber(totalPriceList, 6.0);
 
-			Cell debugPrice1Cell;
-			debugPrice1Cell = debugPrice1Row.getCell(i);
-			if (debugPrice1Cell == null) {
-				debugPrice1Cell = debugPrice1Row.createCell(i);
-			}
-			debugPrice1Cell.setCellValue(minPriceEveryXDaysList1.get(i));
-		}
+		List <Double> finalPrice1List = new ArrayList<>();
+		List <Double> finalPrice2List = new ArrayList<>();
+		List <LocalDate> finalDate1List = new ArrayList<>();
+		List <LocalDate> finalDate2List = new ArrayList<>();
+		List <Double> finalTotalPriceList = new ArrayList<>();
 
-
-		Row debugDate2Row = sheet.getRow(13);
-		if (debugDate2Row == null) {
-			debugDate2Row = sheet.createRow(13);
-		}
-		Row debugPrice2Row = sheet.getRow(14);
-		if (debugPrice2Row == null) {
-			debugPrice2Row = sheet.createRow(14);
-		}
-		for (int i = 0; i<minPriceEveryXDaysList2.size();i++){
-			Cell debugDate2Cell;
-			debugDate2Cell = debugDate2Row.getCell(i);
-			if (debugDate2Cell == null) {
-				debugDate2Cell = debugDate2Row.createCell(i);
-			}
-			debugDate2Cell.setCellValue(minPriceEveryXDaysDatesList2.get(i).toString());
-
-			Cell debugPrice2Cell;
-			debugPrice2Cell = debugPrice2Row.getCell(i);
-			if (debugPrice2Cell == null) {
-				debugPrice2Cell = debugPrice2Row.createCell(i);
-			}
-			debugPrice2Cell.setCellValue(minPriceEveryXDaysList2.get(i));
-		}
-
-		try (FileOutputStream fileOut = new FileOutputStream(FILE_PATH)) {
-			workbook.write(fileOut);
-		}
-//DEBUG_DEBUG_DEBUG_DEBUG_DEBUG_DEBUG_DEBUG_DEBUG_DEBUG_DEBUG_DEBUG_DEBUG_DEBUG_DEBUG_DEBUG_DEBUG
-
-		List<LocalDate> finalSuitableDates1 = new ArrayList<>();
-		List<LocalDate> finalSuitableDates2 = new ArrayList<>();
-		List<Integer> finalSuitableFlightPrice1 = new ArrayList<>();
-		List<Integer> finalSuitableFlightPrice2 = new ArrayList<>();
-		for (int i = 0; i < minPriceEveryXDaysList1.size(); i++) {
-			for (int j = 0; j < minPriceEveryXDaysList2.size(); j++) {
-				if (ChronoUnit.DAYS.between(minPriceEveryXDaysDatesList1.get(i), minPriceEveryXDaysDatesList2.get(j)) >= ConfigVariables.DESIRED_DAYS_NUM_FROM-1
-						&& ChronoUnit.DAYS.between(minPriceEveryXDaysDatesList1.get(i), minPriceEveryXDaysDatesList2.get(j)) <= ConfigVariables.DESIRED_DAYS_NUM_TO-1
-						&& (minPriceEveryXDaysDatesList1.get(i).isBefore(minPriceEveryXDaysDatesList2.get(j))
-						||minPriceEveryXDaysDatesList1.get(i).isEqual(minPriceEveryXDaysDatesList2.get(j))
-				)) {
-					finalSuitableDates1.add(minPriceEveryXDaysDatesList1.get(i));
-					finalSuitableFlightPrice1.add(minPriceEveryXDaysList1.get(i));
-					finalSuitableDates2.add(minPriceEveryXDaysDatesList2.get(j));
-					finalSuitableFlightPrice2.add(minPriceEveryXDaysList2.get(j));
-				}
+		for(int i=0;i<totalPriceList.size();i++){
+			if(totalPriceList.get(i).intValue() != 0){
+				finalPrice1List.add(price1List.get(i));
+				finalPrice2List.add(price2List.get(i));
+				finalDate1List.add(date1List.get(i));
+				finalDate2List.add(date2List.get(i));
+				finalTotalPriceList.add(price1List.get(i)+price2List.get(i));
 			}
 		}
 
-		List<Integer> totalFlightPrice = new ArrayList<>();
-		for (int i = 0; i < finalSuitableFlightPrice1.size(); i++) {
-			totalFlightPrice.add(finalSuitableFlightPrice1.get(i) + finalSuitableFlightPrice2.get(i));
+		//DEBUG_DEBUG_DEBUG_DEBUG_DEBUG_DEBUG_DEBUG_DEBUG_DEBUG_DEBUG_DEBUG_DEBUG
+		if(finalPrice1List.size()>0) {
+			ExcelMethods excelMethods = new ExcelMethods();
+			excelMethods.debugLists(finalPrice1List, finalPrice2List, finalDate1List, finalDate2List);
 		}
+		//DEBUG_DEBUG_DEBUG_DEBUG_DEBUG_DEBUG_DEBUG_DEBUG_DEBUG_DEBUG_DEBUG_DEBUG
 
-		for (int i = 0; i < totalFlightPrice.size() - 1; i++) {
-			for (int j = 0; j < totalFlightPrice.size() - i - 1; j++) {
-				if (totalFlightPrice.get(j) > totalFlightPrice.get(j + 1)) {
-
-					int tempPrice = totalFlightPrice.get(j);
-					totalFlightPrice.set(j, totalFlightPrice.get(j + 1));
-					totalFlightPrice.set(j + 1, tempPrice);
-
-					LocalDate tempDate = finalSuitableDates1.get(j);
-					finalSuitableDates1.set(j, finalSuitableDates1.get(j + 1));
-					finalSuitableDates1.set(j + 1, tempDate);
-
-					tempDate = finalSuitableDates2.get(j);
-					finalSuitableDates2.set(j, finalSuitableDates2.get(j + 1));
-					finalSuitableDates2.set(j + 1, tempDate);
-
-					int tempFlightPrice = finalSuitableFlightPrice1.get(j);
-					finalSuitableFlightPrice1.set(j, finalSuitableFlightPrice1.get(j + 1));
-					finalSuitableFlightPrice1.set(j + 1, tempFlightPrice);
-
-					tempFlightPrice = finalSuitableFlightPrice2.get(j);
-					finalSuitableFlightPrice2.set(j, finalSuitableFlightPrice2.get(j + 1));
-					finalSuitableFlightPrice2.set(j + 1, tempFlightPrice);
-				}
-			}
-		}
-
-		List<String> formattedFinalSuitableDates1 = new ArrayList<>();
-		List<String> formattedFinalSuitableDates2 = new ArrayList<>();
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-		for (LocalDate date : finalSuitableDates1) {
-			String formattedDate = date.format(formatter);
-			formattedFinalSuitableDates1.add(formattedDate);
+
+		MyBot bot = new MyBot();
+		bot.sendLinkToChannel("✈\uFE0F✈\uFE0F  "+ "[RyanAir Search Link](" + RyanAirActions.searchURL + ")" + "  ✈\uFE0F✈\uFE0F");
+
+		for (int i = 0; i < finalPrice1List.size(); i++) {
+			reportMessage += ( "*Flight number*\\: " + methods.numberToEmoji(i + 1) + "\n\n");
+			reportMessage += ("From *" + ConfigVariables.FROM_AIRPORT+ "*" + methods.getFlagEmoji(ConfigVariables.FROM_COUNTRY) +
+					" ➡ To  *" + ConfigVariables.TO_AIRPORT + "*" + methods.getFlagEmoji(ConfigVariables.TO_COUNTRY) +
+					" on\\: " +
+					 "*" + finalDate1List.get(i).format(formatter).replace("-", "\\-") + "*" +
+					" 	Price\\: " + "*" + String.valueOf(finalPrice1List.get(i).intValue()).replace(".", "\\.") + "*" + "\n");
+			reportMessage += ("From *" + ConfigVariables.TO_AIRPORT + "*" + methods.getFlagEmoji(ConfigVariables.TO_COUNTRY) +
+					" ➡ To *" + ConfigVariables.FROM_AIRPORT + "*" + methods.getFlagEmoji(ConfigVariables.FROM_COUNTRY) +
+					" on\\: " +
+					"*" + finalDate2List.get(i).format(formatter).replace("-", "\\-") + "*" +
+					" 	Price\\: " + "*" + String.valueOf(finalPrice2List.get(i).intValue()).replace(".", "\\.") + "*" + "\n" + "\n");
+			reportMessage += ("Total price\\: " + "*" + String.valueOf(finalTotalPriceList.get(i).intValue()).replace(".", "\\.") + "*" + "\n");
+			debug.functionDebug(reportMessage);
+			bot.sendMessageToChannel(reportMessage);
+			reportMessage = "";
 		}
-		for (LocalDate date : finalSuitableDates2) {
-			String formattedDate = date.format(formatter);
-			formattedFinalSuitableDates2.add(formattedDate);
+	}
+
+	private void optimizeFinalFlightsNumber(List <Double> totalPriceList, Double matchFactor) throws IOException {
+		Debug debug = new Debug();
+		int nullCounter = 0;
+		Double minTotalPrice = Double.MAX_VALUE;
+		for (int i=0;i<totalPriceList.size();i++){
+			if (minTotalPrice>totalPriceList.get(i) && totalPriceList.get(i).intValue()!=0){
+				minTotalPrice=totalPriceList.get(i);
+			}
+		}
+		for (int i=0;i<totalPriceList.size();i++){
+			if(totalPriceList.get(i)>(minTotalPrice*matchFactor)){
+				totalPriceList.set(i, (double) 0);
+			}
+			if(totalPriceList.get(i).intValue() == 0){
+				nullCounter++;
+			}
+		}
+		debug.functionDebug("nullCounter = " + nullCounter);
+
+		if(totalPriceList.size()-nullCounter>5){
+			debug.functionDebug("totalPriceList.size() is " + (totalPriceList.size()-nullCounter));
+			debug.functionDebug(" starting optimizing with the new matchFactor = " + (matchFactor-0.2));
+			optimizeFinalFlightsNumber(totalPriceList,(matchFactor-0.05));
+		}
+	}
+	private void debugLists(List<Double> price1List, List<Double> price2List, List<LocalDate> date1List, List<LocalDate> date2List) throws IOException {
+		XSSFWorkbook workbook = new XSSFWorkbook(new FileInputStream(FILE_PATH));
+		UsefulMethods methods = new UsefulMethods();
+		sheetName = today + methods.getAbbreviation(
+				ConfigVariables.FROM_COUNTRY,
+				ConfigVariables.FROM_AIRPORT,
+				ConfigVariables.TO_COUNTRY,
+				ConfigVariables.TO_AIRPORT
+		);
+		Sheet sheet = workbook.getSheet(sheetName);
+		if (sheet == null) {
+			sheet = workbook.createSheet(sheetName);
 		}
 
-		debug.functionDebug("Scan: " + today + " => " + sheetName);
-		MyBot bot = new MyBot();
-		for (int i = 0; i < finalSuitableFlightPrice1.size(); i++) {
-			reportMessage+=("Flight number: " + (i + 1) + "\n\n");
-			debug.functionDebug("Flight number: " + (i + 1));
-			reportMessage+=("From " + ConfigVariables.FROM_AIRPORT + " => To  " + ConfigVariables.TO_AIRPORT + " on: " + formattedFinalSuitableDates1.get(i)
-					+ " 	Price: " + finalSuitableFlightPrice1.get(i) + "\n");
-			debug.functionDebug("From " + ConfigVariables.FROM_AIRPORT + " => To  " + ConfigVariables.TO_AIRPORT + " on: " + formattedFinalSuitableDates1.get(i)
-					+ " 	Price: " + finalSuitableFlightPrice1.get(i) + "\n");
-			reportMessage+=("From " + ConfigVariables.TO_AIRPORT + " => To " + ConfigVariables.FROM_AIRPORT + " on: " + formattedFinalSuitableDates2.get(i)
-					+ " 	Price: " + finalSuitableFlightPrice2.get(i) + "\n");
-			debug.functionDebug("From " + ConfigVariables.TO_AIRPORT + " => To " + ConfigVariables.FROM_AIRPORT + " on: " + formattedFinalSuitableDates2.get(i)
-					+ " 	Price: " + finalSuitableFlightPrice2.get(i) + "\n");
-			reportMessage+=("Total price: " + totalFlightPrice.get(i) + "\n");
-			debug.functionDebug("Total price: " + totalFlightPrice.get(i) + "\n");
-			bot.sendMessageToChannel(reportMessage);
-			reportMessage="";
+		int rowIndex = 11;
+		CellStyle style = workbook.createCellStyle();
+		style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
+		Row date1Row = sheet.createRow(rowIndex);
+		for (int i = 0; i < date1List.size(); i++) {
+			Cell cell = date1Row.createCell(i);
+			cell.setCellValue(date1List.get(i).toString());
+		}
+
+		Row price1Row = sheet.createRow(++rowIndex);
+		for (int i = 0; i < price1List.size(); i++) {
+			Cell cell = price1Row.createCell(i);
+			cell.setCellValue(price1List.get(i).intValue());
+		}
+
+		Row date2Row = sheet.createRow((rowIndex+=2));
+		for (int i = 0; i < date2List.size(); i++) {
+			Cell cell = date2Row.createCell(i);
+			cell.setCellValue(date2List.get(i).toString());
+		}
+
+		Row price2Row = sheet.createRow(++rowIndex);
+		for (int i = 0; i < price2List.size(); i++) {
+			Cell cell = price2Row.createCell(i);
+			cell.setCellValue(price2List.get(i).intValue());
+		}
+
+		try (FileOutputStream outputStream = new FileOutputStream(FILE_PATH)) {
+			workbook.write(outputStream);
 		}
 	}
 	@Test

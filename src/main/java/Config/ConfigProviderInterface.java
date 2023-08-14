@@ -1,10 +1,7 @@
 package Config;
 
-import com.typesafe.config.*;
-
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
 
 public interface ConfigProviderInterface {
 	Config config = readConfig();
