@@ -61,7 +61,6 @@
 23:15:06:    flightCell with ID = 1 from upper carousel is empty, skipping...
 23:15:06:    flightCell with ID = 1 from lower carousel is empty, skipping...
 23:15:06:    DAYS SCANNED: 17
-23:15:06: --- Request for excel row 3 - 304 --- 2023-08-19-------------
 23:15:06: --- Putting the data to excel sheet x = 7, y = 3-------------
 23:15:06: --- Request for excel row 4 - 578 --- 2023-08-19-------------
 23:15:06: --- Putting the data to excel sheet x = 7, y = 4-------------
